@@ -46,7 +46,8 @@ from tensorflow_docs.tools.nblint.decorator import Options
 # Acceptable copyright heading for notebooks following this style.
 copyrights_re = [
     r"Copyright 20[1-9][0-9] The TensorFlow\s.*?\s?Authors",
-    r"Copyright 20[1-9][0-9] Google"
+    r"Copyright 20[1-9][0-9] Google",
+    r"Copyright 20[1-9][0-9] The AI Edge Authors",
 ]
 
 
@@ -56,7 +57,7 @@ def copyright_check(args):
   return any(re.search(pattern, cell_source) for pattern in copyrights_re)
 
 
-license_re = re.compile("#@title Licensed under the Apache License")
+license_re = re.compile("#\s?@title Licensed under the Apache License")
 
 
 @lint(
@@ -81,7 +82,11 @@ def not_translation(args):
 
 # Button checks
 
-is_button_cell_re = re.compile(r"class.*tfo-notebook-buttons")
+# Look for class="tfo-notebook-buttons" (CSS used on website versions) or the
+# run-in-colab logo (for notebooks that stick to GitHub/Colab).
+is_button_cell_re = re.compile(
+    r"class.*tfo-notebook-buttons|colab_logo_32px\.png"
+)
 
 
 def get_arg_or_fail(user_args, arg_name, arg_fmt):
